@@ -45,10 +45,10 @@ type workerParams struct {
 
 // CreateConsumer creates consumer from string map
 func CreateConsumer(entry config.RabbitEntry, rabbitConnector connector.RabbitConnector) consumer.Client {
-    // merge RoutingKey with RoutingKeys
-    if entry.RoutingKey != "" {
-    	entry.RoutingKeys = append(entry.RoutingKeys, entry.RoutingKey)
-    }
+	// merge RoutingKey with RoutingKeys
+	if entry.RoutingKey != "" {
+		entry.RoutingKeys = append(entry.RoutingKeys, entry.RoutingKey)
+	}
 	return Consumer{entry.Name, entry.ConnectionURL, entry.ExchangeName, entry.QueueName, entry.RoutingKeys, rabbitConnector}
 }
 
@@ -69,6 +69,11 @@ func (c Consumer) Start(forwarder forwarder.Client, check chan bool, stop chan b
 			closeRabbitMQ(conn, ch)
 			time.Sleep(ReconnectRabbitMQInterval * time.Second)
 			continue
+		}
+		err = ch.Qos(5, 0, true)
+		if err != nil {
+			err = fmt.Errorf("unable to set prefetch size: %w", err)
+			return err
 		}
 		params := workerParams{forwarder, delivery, check, stop, conn, ch}
 		if err := c.startForwarding(&params); err.Error() == closedBySupervisorMessage {
