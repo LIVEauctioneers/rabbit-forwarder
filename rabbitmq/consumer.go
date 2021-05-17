@@ -70,11 +70,6 @@ func (c Consumer) Start(forwarder forwarder.Client, check chan bool, stop chan b
 			time.Sleep(ReconnectRabbitMQInterval * time.Second)
 			continue
 		}
-		err = ch.Qos(5, 0, false)
-		if err != nil {
-			err = fmt.Errorf("unable to set prefetch size: %w", err)
-			return err
-		}
 		params := workerParams{forwarder, delivery, check, stop, conn, ch}
 		if err := c.startForwarding(&params); err.Error() == closedBySupervisorMessage {
 			break
@@ -122,6 +117,12 @@ func (c Consumer) setupExchangesAndQueues(conn *amqp.Connection, ch *amqp.Channe
 	var err error
 	deadLetterExchangeName := c.QueueName + "-dead-letter"
 	deadLetterQueueName := c.QueueName + "-dead-letter"
+	// set prefetch on channel
+	err = ch.Qos(5, 0, false)
+	if err != nil {
+		err = fmt.Errorf("unable to set prefetch size: %w", err)
+		return failOnError(err, "Failed to set channel prefetch:"+c.QueueName)
+	}
 	// regular exchange
 	if err = ch.ExchangeDeclare(c.ExchangeName, "topic", true, false, false, false, nil); err != nil {
 		return failOnError(err, "Failed to declare an exchange:"+c.ExchangeName)
