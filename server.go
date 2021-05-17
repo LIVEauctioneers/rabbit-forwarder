@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/mapping"
-	"github.com/AirHelp/rabbit-amazon-forwarder/supervisor"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/mapping"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/supervisor"
 	log "github.com/sirupsen/logrus"
 )
 
