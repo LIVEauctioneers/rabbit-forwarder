@@ -2,10 +2,11 @@ package sqs
 
 import (
 	"errors"
+
 	log "github.com/sirupsen/logrus"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/config"
-	"github.com/AirHelp/rabbit-amazon-forwarder/forwarder"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"

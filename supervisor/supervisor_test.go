@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/forwarder"
-	"github.com/AirHelp/rabbit-amazon-forwarder/mapping"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/mapping"
 )
 
 func TestStart(t *testing.T) {

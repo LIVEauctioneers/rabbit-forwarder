@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/AirHelp/rabbit-amazon-forwarder/mapping"
-	"github.com/AirHelp/rabbit-amazon-forwarder/supervisor"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
+
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/mapping"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/supervisor"
+	log "github.com/sirupsen/logrus"
 )
 
 const (

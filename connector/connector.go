@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/config"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/streadway/amqp"

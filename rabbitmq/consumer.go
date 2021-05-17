@@ -7,10 +7,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/config"
-	"github.com/AirHelp/rabbit-amazon-forwarder/connector"
-	"github.com/AirHelp/rabbit-amazon-forwarder/consumer"
-	"github.com/AirHelp/rabbit-amazon-forwarder/forwarder"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/connector"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/consumer"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/streadway/amqp"
 )
 
@@ -45,10 +45,10 @@ type workerParams struct {
 
 // CreateConsumer creates consumer from string map
 func CreateConsumer(entry config.RabbitEntry, rabbitConnector connector.RabbitConnector) consumer.Client {
-    // merge RoutingKey with RoutingKeys
-    if entry.RoutingKey != "" {
-    	entry.RoutingKeys = append(entry.RoutingKeys, entry.RoutingKey)
-    }
+	// merge RoutingKey with RoutingKeys
+	if entry.RoutingKey != "" {
+		entry.RoutingKeys = append(entry.RoutingKeys, entry.RoutingKey)
+	}
 	return Consumer{entry.Name, entry.ConnectionURL, entry.ExchangeName, entry.QueueName, entry.RoutingKeys, rabbitConnector}
 }
 
@@ -117,6 +117,12 @@ func (c Consumer) setupExchangesAndQueues(conn *amqp.Connection, ch *amqp.Channe
 	var err error
 	deadLetterExchangeName := c.QueueName + "-dead-letter"
 	deadLetterQueueName := c.QueueName + "-dead-letter"
+	// set prefetch on channel
+	err = ch.Qos(5, 0, false)
+	if err != nil {
+		err = fmt.Errorf("unable to set prefetch size: %w", err)
+		return failOnError(err, "Failed to set channel prefetch:"+c.QueueName)
+	}
 	// regular exchange
 	if err = ch.ExchangeDeclare(c.ExchangeName, "topic", true, false, false, false, nil); err != nil {
 		return failOnError(err, "Failed to declare an exchange:"+c.ExchangeName)

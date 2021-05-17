@@ -2,8 +2,9 @@ package lambda
 
 import (
 	"errors"
-	"github.com/AirHelp/rabbit-amazon-forwarder/config"
-	"github.com/AirHelp/rabbit-amazon-forwarder/forwarder"
+
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/lambda"
