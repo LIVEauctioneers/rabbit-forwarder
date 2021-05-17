@@ -70,7 +70,7 @@ func (c Consumer) Start(forwarder forwarder.Client, check chan bool, stop chan b
 			time.Sleep(ReconnectRabbitMQInterval * time.Second)
 			continue
 		}
-		err = ch.Qos(5, 0, true)
+		err = ch.Qos(5, 0, false)
 		if err != nil {
 			err = fmt.Errorf("unable to set prefetch size: %w", err)
 			return err
