@@ -1,5 +1,3 @@
-github.com/AirHelp/rabbit-amazon-forwarder v0.0.0-20190905051238-86b692aa87e6 h1:RAYA7YkBEQhGGHZJMOUdxEp7gGbszGkAWc90h2xSJQs=
-github.com/AirHelp/rabbit-amazon-forwarder v0.0.0-20190905051238-86b692aa87e6/go.mod h1:v2F6L0g3yGVyRwvVQtE338FlAg0SYfqtoJZWxude+5c=
 github.com/aws/aws-sdk-go v1.38.40 h1:VVqBFV24tGgXR11tFXPjmR+0ItbnUepbuQjdmhgu3U0=
 github.com/aws/aws-sdk-go v1.38.40/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

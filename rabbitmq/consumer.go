@@ -7,8 +7,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/connector"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/connector"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/consumer"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/streadway/amqp"

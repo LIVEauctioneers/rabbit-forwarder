@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/AirHelp/rabbit-amazon-forwarder/connector"
+	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/connector"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
