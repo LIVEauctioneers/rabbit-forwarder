@@ -1,4 +1,4 @@
-FROM liveauctioneers/alpine
+FROM alpine
 
 RUN apk add --update ca-certificates tzdata && \
     rm -rf /var/cache/apk/* /tmp/*
