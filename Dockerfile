@@ -1,9 +1,12 @@
-FROM gcr.io/distroless/static
+FROM alpine
 
-USER nonroot:nonroot
+RUN apk add --update ca-certificates tzdata && \
+    rm -rf /var/cache/apk/* /tmp/*
 
-ADD --chown=nonroot:nonroot rabbit-amazon-forwarder /rabbit-amazon-forwarder
+WORKDIR /app/
+
+COPY ./rabbit-amazon-forwarder /app/rabbit-amazon-forwarder
 
 EXPOSE 80
 
-CMD ["/rabbit-amazon-forwarder"]
+CMD ["./rabbit-amazon-forwarder"]
