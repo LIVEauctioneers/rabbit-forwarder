@@ -1,12 +1,9 @@
-FROM liveauctioneers/alpine
+FROM gcr.io/distroless/static
 
-RUN apk add --update ca-certificates tzdata && \
-    rm -rf /var/cache/apk/* /tmp/*
+USER nonroot:nonroot
 
-WORKDIR /app/
-
-COPY ./rabbit-amazon-forwarder /app/rabbit-amazon-forwarder
+ADD --chown=nonroot:nonroot rabbit-amazon-forwarder /rabbit-amazon-forwarder
 
 EXPOSE 80
 
-CMD ["./rabbit-amazon-forwarder"]
+CMD ["/rabbit-amazon-forwarder"]
