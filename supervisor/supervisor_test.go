@@ -28,7 +28,7 @@ func TestRestart(t *testing.T) {
 		t.Error("Could not prepare response. Error: ", err.Error())
 	}
 	supervisor := New(prepareConsumers())
-	req, err := http.NewRequest("GET", "/restart", nil)
+	req, err := http.NewRequest("GET", "/restart", http.NoBody)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +75,7 @@ func TestCheck(t *testing.T) {
 		{406, string(notAcceptedMessage), "plain/text"},
 	}
 	for _, c := range cases {
-		req, err := http.NewRequest("GET", "/check", nil)
+		req, err := http.NewRequest("GET", "/check", http.NoBody)
 		if err != nil {
 			t.Fatal(err)
 		}

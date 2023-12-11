@@ -11,7 +11,7 @@ import (
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/connector"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/consumer"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 const (
@@ -185,7 +185,6 @@ func (c Consumer) startForwarding(params *workerParams) error {
 						"error":         err.Error()}).Error("Could not reject message")
 					return err
 				}
-
 			} else {
 				if err := d.Ack(true); err != nil {
 					log.WithFields(log.Fields{

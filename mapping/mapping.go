@@ -2,7 +2,6 @@ package mapping
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/connector"
@@ -76,7 +75,7 @@ func (c Client) Load() ([]ConsumerForwarderMapping, error) {
 func (c Client) loadFile() ([]byte, error) {
 	filePath := os.Getenv(config.MappingFile)
 	log.WithField("mappingFile", filePath).Info("Loading mapping file")
-	return ioutil.ReadFile(filePath)
+	return os.ReadFile(filePath)
 }
 
 func (h helperImpl) createConsumer(entry config.RabbitEntry) consumer.Client {
