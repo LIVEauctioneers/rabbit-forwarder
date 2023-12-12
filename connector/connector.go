@@ -3,14 +3,13 @@ package connector
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"io/ioutil"
 	"os"
 	"strings"
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type FileReader interface {
@@ -21,7 +20,7 @@ type IOFileReader struct {
 }
 
 func (i *IOFileReader) ReadFile(filename string) ([]byte, error) {
-	return ioutil.ReadFile(filename)
+	return os.ReadFile(filename)
 }
 
 type CertPoolMaker interface {

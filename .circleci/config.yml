@@ -4,7 +4,7 @@ parameters:
   go_version:
     description: The version of go used for this build pipeline
     type: string
-    default: "1.19"
+    default: "1.21"
 
 orbs:
   lambda: liveauctioneers/lambda@1.2
@@ -16,4 +16,3 @@ workflows:
       - lambda/server_build_and_publish:
           context: la_build_vars
           go_version: <<pipeline.parameters.go_version>>
-         

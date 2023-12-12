@@ -20,7 +20,7 @@ const (
 )
 
 func TestLoad(t *testing.T) {
-	os.Setenv(config.MappingFile, "../tests/rabbit_to_sns.json")
+	_ = os.Setenv(config.MappingFile, "../tests/rabbit_to_sns.json")
 	client := New(MockMappingHelper{})
 	var consumerForwarderMapping []ConsumerForwarderMapping
 	var err error
@@ -33,7 +33,7 @@ func TestLoad(t *testing.T) {
 }
 
 func TestLoadFile(t *testing.T) {
-	os.Setenv(config.MappingFile, "../tests/rabbit_to_sns.json")
+	_ = os.Setenv(config.MappingFile, "../tests/rabbit_to_sns.json")
 	client := New()
 	data, err := client.loadFile()
 	if err != nil {

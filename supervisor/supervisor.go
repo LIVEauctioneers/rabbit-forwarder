@@ -69,13 +69,13 @@ func (c *Client) Check(w http.ResponseWriter, r *http.Request) {
 	stopped := 0
 	for _, consumer := range c.consumers {
 		if len(consumer.check) > 0 {
-			stopped = stopped + 1
+			stopped++
 			continue
 		}
 		consumer.check <- true
 		time.Sleep(500 * time.Millisecond)
 		if len(consumer.check) > 0 {
-			stopped = stopped + 1
+			stopped++
 		}
 	}
 	if stopped > 0 {
@@ -112,7 +112,7 @@ func makeConsumerChannel(name string) *consumerChannel {
 func errorResponse(w http.ResponseWriter, message string) {
 	w.Header().Set(contentType, jsonType)
 	w.WriteHeader(500)
-	w.Write([]byte(message))
+	_, _ = w.Write([]byte(message))
 }
 
 func notAcceptableResponse(w http.ResponseWriter) {
@@ -124,7 +124,7 @@ func notAcceptableResponse(w http.ResponseWriter) {
 		w.WriteHeader(500)
 		return
 	}
-	w.Write(bytes)
+	_, _ = w.Write(bytes)
 }
 
 func successResponse(w http.ResponseWriter) {
@@ -136,5 +136,5 @@ func successResponse(w http.ResponseWriter) {
 		w.WriteHeader(200)
 		return
 	}
-	w.Write(bytes)
+	_, _ = w.Write(bytes)
 }
