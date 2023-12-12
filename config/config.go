@@ -8,6 +8,8 @@ const (
 	KeyFile     = "KEY_FILE"
 )
 
+var MappingJSON []byte
+
 // RabbitEntry RabbitMQ mapping entry
 type RabbitEntry struct {
 	Type          string   `json:"type"`
