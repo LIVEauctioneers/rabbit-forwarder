@@ -126,5 +126,3 @@ Exposed endpoints:
 
 - `APP_URL/health` - returns status if all consumers are running
 - `APP_URL/restart` - restarts all consumer->forwarder pairs
-
-asd
