@@ -10,13 +10,10 @@ import (
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/lambda"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/rabbitmq"
-	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/sns"
-	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/sqs"
 )
 
 const (
 	rabbitType = "rabbit"
-	snsType    = "sns"
 )
 
 func TestLoad(t *testing.T) {
@@ -63,32 +60,6 @@ func TestCreateConsumer(t *testing.T) {
 	}
 }
 
-func TestCreateForwarderSNS(t *testing.T) {
-	client := New(MockMappingHelper{})
-	forwarderName := "test-sns"
-	entry := config.AmazonEntry{Type: "SNS",
-		Name:   forwarderName,
-		Target: "arn",
-	}
-	forwarder := client.helper.createForwarder(entry)
-	if forwarder.Name() != forwarderName {
-		t.Errorf("wrong forwarder name, expected %s, found %s", forwarderName, forwarder.Name())
-	}
-}
-
-func TestCreateForwarderSQS(t *testing.T) {
-	client := New(MockMappingHelper{})
-	forwarderName := "test-sqs"
-	entry := config.AmazonEntry{Type: "SQS",
-		Name:   forwarderName,
-		Target: "arn",
-	}
-	forwarder := client.helper.createForwarder(entry)
-	if forwarder.Name() != forwarderName {
-		t.Errorf("wrong forwarder name, expected %s, found %s", forwarderName, forwarder.Name())
-	}
-}
-
 func TestCreateForwarderLambda(t *testing.T) {
 	client := New(MockMappingHelper{})
 	forwarderName := "test-lambda"
@@ -107,14 +78,6 @@ type MockMappingHelper struct{}
 
 type MockRabbitConsumer struct{}
 
-type MockSNSForwarder struct {
-	name string
-}
-
-type MockSQSForwarder struct {
-	name string
-}
-
 type MockLambdaForwarder struct {
 	name string
 }
@@ -129,10 +92,6 @@ func (h MockMappingHelper) createConsumer(entry config.RabbitEntry) consumer.Cli
 }
 func (h MockMappingHelper) createForwarder(entry config.AmazonEntry) forwarder.Client {
 	switch entry.Type {
-	case sns.Type:
-		return MockSNSForwarder{entry.Name}
-	case sqs.Type:
-		return MockSQSForwarder{entry.Name}
 	case lambda.Type:
 		return MockLambdaForwarder{entry.Name}
 	}
@@ -147,28 +106,12 @@ func (c MockRabbitConsumer) Start(client forwarder.Client, check chan bool, stop
 	return nil
 }
 
-func (f MockSNSForwarder) Name() string {
-	return f.name
-}
-
-func (f MockSNSForwarder) Push(message string) error {
-	return nil
-}
-
-func (f MockSQSForwarder) Name() string {
-	return f.name
-}
-
 func (f MockLambdaForwarder) Push(message string) error {
 	return nil
 }
 
 func (f MockLambdaForwarder) Name() string {
 	return f.name
-}
-
-func (f MockSQSForwarder) Push(message string) error {
-	return nil
 }
 
 func (f ErrorForwarder) Name() string {
