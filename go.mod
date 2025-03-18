@@ -6,6 +6,8 @@ require (
 	github.com/LIVEauctioneers/service-utils v1.15.49
 	github.com/aws/aws-sdk-go v1.55.6
 	github.com/aws/aws-sdk-go-v2 v1.36.3
+	github.com/aws/aws-sdk-go-v2/config v1.29.9
+	github.com/aws/aws-sdk-go-v2/service/lambda v1.70.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.78.2
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/sirupsen/logrus v1.9.3
@@ -13,7 +15,6 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.10 // indirect
-	github.com/aws/aws-sdk-go-v2/config v1.29.9 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.62 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.30 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.34 // indirect

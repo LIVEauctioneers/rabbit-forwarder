@@ -1,13 +1,14 @@
 package lambda
 
 import (
+	"context"
 	"errors"
 	"testing"
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 )
 
@@ -36,42 +37,42 @@ func TestPush(t *testing.T) {
 	}
 	scenarios := []struct {
 		name     string
-		mock     lambdaiface.LambdaAPI
+		mock     IFace
 		message  string
 		function string
 		err      error
 	}{
 		{
 			name:     "empty message",
-			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: aws.Int64(202)}, function: functionName, message: ""},
+			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: 202}, function: functionName, message: ""},
 			message:  "",
 			function: functionName,
 			err:      errors.New(forwarder.EmptyMessageError),
 		},
 		{
 			name:     "bad request",
-			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: aws.Int64(202)}, function: functionName, message: badRequest},
+			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: 202}, function: functionName, message: badRequest},
 			message:  badRequest,
 			function: functionName,
 			err:      errors.New(badRequest),
 		},
 		{
 			name:     "handled error",
-			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: aws.Int64(202), FunctionError: aws.String(handlerError)}, function: functionName, message: handlerError},
+			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: 202, FunctionError: aws.String(handlerError)}, function: functionName, message: handlerError},
 			message:  handlerError,
 			function: functionName,
 			err:      errors.New(handlerError),
 		},
 		{
 			name:     "unhandled error",
-			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: aws.Int64(202), FunctionError: aws.String(unhandledError)}, function: functionName, message: unhandledError},
+			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: 202, FunctionError: aws.String(unhandledError)}, function: functionName, message: unhandledError},
 			message:  unhandledError,
 			function: functionName,
 			err:      errors.New(unhandledError),
 		},
 		{
 			name:     "success",
-			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: aws.Int64(202)}, function: functionName, message: "abc"},
+			mock:     mockAmazonLambda{resp: lambda.InvokeOutput{StatusCode: 202}, function: functionName, message: "abc"},
 			message:  "abc",
 			function: functionName,
 			err:      nil,
@@ -105,7 +106,7 @@ type mockAmazonLambda struct {
 	message  string
 }
 
-func (m mockAmazonLambda) Invoke(input *lambda.InvokeInput) (*lambda.InvokeOutput, error) {
+func (m mockAmazonLambda) Invoke(ctx context.Context, input *lambda.InvokeInput, optFns ...func(*lambda.Options)) (*lambda.InvokeOutput, error) {
 	if *input.FunctionName != m.function {
 		return nil, errors.New("Wrong function name")
 	}

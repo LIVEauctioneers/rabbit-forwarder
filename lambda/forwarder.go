@@ -1,14 +1,15 @@
 package lambda
 
 import (
+	"context"
 	"errors"
+	"fmt"
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/lambda"
-	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -20,17 +21,25 @@ const (
 // Forwarder forwarding client
 type Forwarder struct {
 	name         string
-	lambdaClient lambdaiface.LambdaAPI
+	lambdaClient IFace
 	function     string
 }
 
+type IFace interface {
+	Invoke(ctx context.Context, params *lambda.InvokeInput, optFns ...func(*lambda.Options)) (*lambda.InvokeOutput, error)
+}
+
 // CreateForwarder creates instance of forwarder
-func CreateForwarder(entry config.AmazonEntry, lambdaClient ...lambdaiface.LambdaAPI) forwarder.Client {
-	var client lambdaiface.LambdaAPI
+func CreateForwarder(entry config.AmazonEntry, lambdaClient ...IFace) forwarder.Client {
+	var client IFace
 	if len(lambdaClient) > 0 {
 		client = lambdaClient[0]
 	} else {
-		client = lambda.New(session.Must(session.NewSession()))
+		cfg, err := awsConfig.LoadDefaultConfig(context.Background(), awsConfig.WithRegion("us-east-1"))
+		if err != nil {
+			panic(fmt.Sprintf("unable to load SDK config, %v", err))
+		}
+		client = lambda.NewFromConfig(cfg)
 	}
 	forwarder := Forwarder{entry.Name, client, entry.Target}
 	log.WithField("forwarderName", forwarder.Name()).Info("Created forwarder")
@@ -51,7 +60,7 @@ func (f Forwarder) Push(message string) error {
 		FunctionName: aws.String(f.function),
 		Payload:      []byte(message),
 	}
-	resp, err := f.lambdaClient.Invoke(params)
+	resp, err := f.lambdaClient.Invoke(context.Background(), params)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"forwarderName": f.Name(),
