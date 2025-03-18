@@ -7,9 +7,8 @@ import (
 
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/config"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
 )
 
 const (
@@ -100,7 +99,6 @@ func TestPush(t *testing.T) {
 }
 
 type mockAmazonLambda struct {
-	lambdaiface.LambdaAPI
 	resp     lambda.InvokeOutput
 	function string
 	message  string
