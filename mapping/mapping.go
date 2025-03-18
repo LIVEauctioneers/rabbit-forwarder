@@ -12,8 +12,6 @@ import (
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/forwarder"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/lambda"
 	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/rabbitmq"
-	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/sns"
-	"github.com/LIVEauctioneers/rabbit-amazon-forwarder/sqs"
 )
 
 type pairs []pair
@@ -98,10 +96,6 @@ func (h helperImpl) createForwarder(entry config.AmazonEntry) forwarder.Client {
 		"forwarderType": entry.Type,
 		"forwarderName": entry.Name}).Info("Creating forwarder")
 	switch entry.Type {
-	case sns.Type:
-		return sns.CreateForwarder(entry)
-	case sqs.Type:
-		return sqs.CreateForwarder(entry)
 	case lambda.Type:
 		return lambda.CreateForwarder(entry)
 	}
